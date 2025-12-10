@@ -77,12 +77,12 @@ public class Magpie
         }
 
         // Responses which require transformations
-        else if (findKeyword(statement, "I want to") >= 0) 
+        else if (findKeyword(statement, "I want") >= 0) 
         {
             response = transformIWantToStatement(statement);
         }
-        else if (findKeyword(statement, "you") >= 0 
-                 && findKeyword(statement, "me") > findKeyword(statement, "you"))
+        else if (findKeyword(statement, "I") >= 0 
+                 && findKeyword(statement, "you") > findKeyword(statement, "I"))
         {
             response = transformYouMeStatement(statement);
         }
@@ -100,29 +100,20 @@ public class Magpie
      */
     private String getRandomResponse()
     {
-        final int NUMBER_OF_RESPONSES = 4;
-        double r = Math.random();
-        int whichResponse = (int)(r * NUMBER_OF_RESPONSES);
-        String response = "";
-
-        if (whichResponse == 0)
-        {
-            response = "Interesting, tell me more.";
-        }
-        else if (whichResponse == 1)
-        {
-            response = "Hmmm.";
-        }
-        else if (whichResponse == 2)
-        {
-            response = "Do you really think so?";
-        }
-        else if (whichResponse == 3)
-        {
-            response = "You don't say.";
-        }
-
-        return response;
+        final String[] randomResponses = {
+            "Interesting, tell me more!!",
+            "Hmmm.",
+            "Do you really think so?",
+            "You don't say.",
+            "Would you like to repeat that in a different way?",
+            "Interesting one must say.",
+            "This seems like an interesting topic.",
+            "Is there something else you want to say?",
+            "Is there something else you would like me to talk about?",
+            "Would you like me to say something different."
+        };
+        int r = (int)(Math.random() * randomResponses.length);
+        return randomResponses[r];
     }
 
      /**
@@ -218,10 +209,10 @@ public class Magpie
         }
 
         // Transform the statement into a question
-        String kw = "I want to";
+        String kw = "I want";
         int psn = findKeyword (statement, kw);
         String restOfStatement = statement.substring(psn + kw.length()).trim();
-        return "What would it mean to " + restOfStatement + "?";
+        return "Would you really be happy if you had " + restOfStatement + "?";
     }
 
     /**
@@ -232,12 +223,12 @@ public class Magpie
      */
     private String transformYouMeStatement(String statement)
     {
-        String you = "you";
-        String me = "me";
+        String you = "I";
+        String me = "you";
         int psnOfYou = findKeyword (statement, you, 0);
         int psnOfMe = findKeyword (statement, me, psnOfYou + you.length());
 
         String restOfStatement = statement.substring(psnOfYou + you.length(), psnOfMe).trim();
-        return "What makes you think that I " + restOfStatement + " you?";
+        return "Why do you " + restOfStatement + " me?";
     }
 }
